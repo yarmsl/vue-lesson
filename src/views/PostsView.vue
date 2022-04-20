@@ -1,18 +1,19 @@
 <template>
-  <div class="home">
+  <div class="posts-view">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld />
+    <h1>This is posts page</h1>
+    <PostsBox />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+import PostsBox from "@/components/PostsBox.vue"; // @ is an alias to /src
 
 export default defineComponent({
-  name: "HomeView",
+  name: "PostsView",
   components: {
-    HelloWorld,
+    PostsBox,
   },
 });
 </script>
