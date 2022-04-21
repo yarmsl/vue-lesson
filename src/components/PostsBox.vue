@@ -1,7 +1,10 @@
 <template>
   <div class="posts-box">
-    <post-form @create="createPost" />
-    <posts-list :posts="posts" />
+    <ui-dialog v-model:open="dialogOpen"><post-form @create="createPost" /></ui-dialog>
+    <posts-list v-if="posts.length > 0" :posts="posts" @remove="removePost" />
+    <h5 v-else-if="isPostsLoading">Идёт загрузка...</h5>
+    <h5 v-else>Постов нет</h5>
+    <h5 class="error" v-show="error">{{ error }}</h5>
   </div>
 </template>
 
@@ -9,29 +12,51 @@
 import { defineComponent } from "vue";
 import PostForm from "./PostForm.vue";
 import PostsList from "./PostsList.vue";
-
-interface IPost {
-  id: number;
-  title: string;
-  content: string;
-}
+import { fetchGet } from "../lib/fetch";
+import { IGetPostRes, IPost } from "./types";
+import UiDialog from "./UI/UiDialog.vue";
 
 export default defineComponent({
-  components: { PostsList, PostForm },
+  components: { PostsList, PostForm, UiDialog },
   name: "PostsBox",
   data() {
     return {
-      posts: [
-        { id: 1, title: "js", content: "dead" },
-        { id: 2, title: "ts", content: "alive" },
-        { id: 3, title: "fs", content: "from node" },
-      ],
+      posts: [] as IPost[],
+      dialogOpen: false,
+      error: "",
+      isPostsLoading: false,
     };
   },
   methods: {
     createPost(post: IPost) {
       this.posts.push(post);
+      this.dialogOpen = false;
     },
+    removePost(id: number) {
+      this.posts = this.posts.filter((post) => post.id !== id);
+    },
+    openDialog() {
+      this.dialogOpen = true;
+    },
+    async fetchPosts() {
+      try {
+        this.isPostsLoading = true;
+        const res = await fetchGet<IGetPostRes[]>("https://jsonplaceholder.typicode.com/posts");
+        const transformRes: IPost[] = res.map((post) => ({
+          id: post.id,
+          title: post.title,
+          content: post.body,
+        }));
+        this.posts = transformRes;
+      } catch (e) {
+        this.error = e instanceof Error ? e.message : "Неизвестная ошибка";
+      } finally {
+        this.isPostsLoading = false;
+      }
+    },
+  },
+  mounted() {
+    this.fetchPosts();
   },
 });
 </script>
@@ -49,5 +74,17 @@ export default defineComponent({
   flex-wrap: wrap;
   align-content: flex-start;
   padding: 6px;
+}
+.open {
+  margin: 8px 0px;
+  background-color: teal;
+  color: #fff;
+  &:hover {
+    background-color: rgb(0, 182, 182);
+  }
+}
+
+.error {
+  color: crimson;
 }
 </style>

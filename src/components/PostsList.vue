@@ -3,8 +3,10 @@
     <post-item
       v-for="post in posts"
       v-bind:key="post.id"
+      :id="post.id"
       :title="post.title"
       :content="post.content"
+      @remove="$emit('remove', post.id)"
     />
   </div>
 </template>
@@ -12,12 +14,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import PostItem from "./PostItem.vue";
-
-interface IPost {
-  id: number;
-  title: string;
-  content: string;
-}
+import { IPost } from "./types";
 
 export default defineComponent({
   components: { PostItem },

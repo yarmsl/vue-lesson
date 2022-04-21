@@ -1,12 +1,8 @@
 <template>
   <form class="posts-form" @submit.prevent>
     <h4>Создание поста</h4>
-    <label for="title"
-      ><span>Название</span><input v-model="post.title" id="title" name="title" type="text"
-    /></label>
-    <label for="content"
-      ><span>Контент</span><input v-model="post.content" id="content" name="content" type="text"
-    /></label>
+    <ui-input v-model="post.title" id="title" type="text">Название</ui-input>
+    <ui-input v-model="post.content" id="content" type="text">Контент</ui-input>
     <ui-button class="add-button" @click="createPost">Отправить</ui-button>
   </form>
 </template>
@@ -14,9 +10,10 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import UiButton from "./UI/UiButton.vue";
+import UiInput from "./UI/UiInput.vue";
 
 export default defineComponent({
-  components: { UiButton },
+  components: { UiButton, UiInput },
   name: "PostsForm",
   data() {
     return {
@@ -44,7 +41,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .posts-form {
   width: 200px;
-  padding: 12px;
   display: flex;
   flex-direction: column;
 }

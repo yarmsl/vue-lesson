@@ -5,7 +5,7 @@
       <p>{{ content }}</p>
     </div>
     <div class="actions">
-      <ui-button class="remove">Удалить</ui-button>
+      <ui-button class="remove" @click="$emit('remove', id)">Удалить</ui-button>
     </div>
   </div>
 </template>
@@ -18,6 +18,7 @@ export default defineComponent({
   components: { UiButton },
   name: "PostsItem",
   props: {
+    id: Number,
     title: String,
     content: String,
   },
