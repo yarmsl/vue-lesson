@@ -1,5 +1,10 @@
 <template>
   <div class="posts-box">
+    <div class="actions">
+      <ui-button @click="openDialog" class="open">Создать пост</ui-button>
+      <ui-select v-model="selectedSort" :options="sortOptions" />
+    </div>
+
     <ui-dialog v-model:open="dialogOpen"><post-form @create="createPost" /></ui-dialog>
     <posts-list v-if="posts.length > 0" :posts="posts" @remove="removePost" />
     <h5 v-else-if="isPostsLoading">Идёт загрузка...</h5>
@@ -15,9 +20,11 @@ import PostsList from "./PostsList.vue";
 import { fetchGet } from "../lib/fetch";
 import { IGetPostRes, IPost } from "./types";
 import UiDialog from "./UI/UiDialog.vue";
+import UiButton from "./UI/UiButton.vue";
+import UiSelect from "./UI/UiSelect.vue";
 
 export default defineComponent({
-  components: { PostsList, PostForm, UiDialog },
+  components: { PostsList, PostForm, UiDialog, UiButton, UiSelect },
   name: "PostsBox",
   data() {
     return {
@@ -25,6 +32,19 @@ export default defineComponent({
       dialogOpen: false,
       error: "",
       isPostsLoading: false,
+      selectedSort: "",
+      sortOptions: [
+        {
+          id: 1,
+          value: "title",
+          label: "По названию",
+        },
+        {
+          id: 2,
+          value: "content",
+          label: "По содержимому",
+        },
+      ],
     };
   },
   methods: {
@@ -75,8 +95,14 @@ export default defineComponent({
   align-content: flex-start;
   padding: 6px;
 }
-.open {
+
+.actions {
   margin: 8px 0px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.open {
   background-color: teal;
   color: #fff;
   &:hover {

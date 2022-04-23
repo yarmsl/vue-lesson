@@ -10,7 +10,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .ui-button {
   border: none;
   outline: none;

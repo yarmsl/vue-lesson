@@ -27,6 +27,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .post {
+  width: calc(33.333% - 12px);
   display: flex;
   flex-direction: column;
   padding: 12px;

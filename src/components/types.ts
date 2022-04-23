@@ -5,3 +5,9 @@ export interface IPost {
 }
 
 export type IGetPostRes = Omit<IPost, "content"> & { userId: number; body: string };
+
+export interface IOption {
+  id: number;
+  value: string;
+  label: string;
+}
